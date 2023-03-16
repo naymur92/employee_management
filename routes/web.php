@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +15,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+/*------------------------------------------
+--------------------------------------------
+All Normal Employee Routes List
+--------------------------------------------
+--------------------------------------------*/
+Route::middleware(['auth', 'employee-access:employee'])->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+});
+
+/*------------------------------------------
+--------------------------------------------
+All Admin Routes List
+--------------------------------------------
+--------------------------------------------*/
+Route::middleware(['auth', 'employee-access:admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.home');
+});
