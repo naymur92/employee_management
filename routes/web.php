@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -18,11 +19,14 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+// Employee part
 Route::middleware(['auth', 'employee-access:employee'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 });
 
+// Admin part
+Route::middleware(['auth', 'employee-access:admin'])->prefix('admin')->group(function () {
+    Route::get('', [AdminController::class, 'index'])->name('admin.home');
 
-Route::middleware(['auth', 'employee-access:admin'])->group(function () {
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.home');
+    Route::resource('employees', EmployeeController::class);
 });

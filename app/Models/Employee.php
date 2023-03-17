@@ -58,4 +58,14 @@ class Employee extends Authenticatable
       get: fn ($value) =>  ["employee", "admin"][$value],
     );
   }
+
+  public function detail()
+  {
+    return $this->hasOne(related: EmployeeDetail::class, foreignKey: 'employee_id');
+  }
+
+  public function contacts()
+  {
+    return $this->hasMany(related: EmployeeContact::class, foreignKey: 'employee_id');
+  }
 }

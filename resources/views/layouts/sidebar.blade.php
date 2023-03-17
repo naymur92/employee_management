@@ -1,3 +1,32 @@
+<?php
+// set collapsed class
+function isCollapsed(array $controllerNameArray)
+{
+    $c_con_array = explode('.', Route::currentRouteName());
+    $current_controller = $c_con_array[0];
+    if (in_array($current_controller, $controllerNameArray)) {
+        echo 'menu-open';
+    }
+}
+
+// set active class in main menu
+function isMenuActive(array $controllerNameArray)
+{
+    $c_con_array = explode('.', Route::currentRouteName());
+    $current_controller = $c_con_array[0];
+    if (in_array($current_controller, $controllerNameArray)) {
+        echo 'active';
+    }
+}
+
+// set active class
+function isActive($routeName)
+{
+    if (Route::currentRouteName() == $routeName) {
+        echo 'active';
+    }
+}
+?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
   <a href="{{ auth()->user()->type == 'admin' ? route('admin.home') : route('home') }}" class="brand-link">
@@ -21,8 +50,9 @@
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
         {{-- Dashboard --}}
-        <li class="nav-item menu-open">
-          <a href="{{ auth()->user()->type == 'admin' ? route('admin.home') : route('home') }}" class="nav-link active">
+        <li class="nav-item">
+          <a href="{{ auth()->user()->type == 'admin' ? route('admin.home') : route('home') }}"
+            class="nav-link {{ auth()->user()->type == 'admin' ? isActive('admin.home') : isActive('home') }}">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
               Dashboard
@@ -34,8 +64,8 @@
           {{-- Admin Section --}}
 
           {{-- Employees --}}
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
+          <li class="nav-item {{ isCollapsed(['employees']) }}">
+            <a href="#" class="nav-link {{ isMenuActive(['employees']) }}">
               <i class="nav-icon fas fa-users"></i>
               <p>
                 Employees
@@ -44,13 +74,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link active">
+                <a href="{{ route('employees.index') }}" class="nav-link {{ isActive('employees.index') }}">
                   <i class="fas fa-list nav-icon"></i>
                   <p>Employee List</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('employees.create') }}" class="nav-link {{ isActive('employees.create') }}">
                   <i class="fas fa-plus nav-icon"></i>
                   <p>Add Employee</p>
                 </a>

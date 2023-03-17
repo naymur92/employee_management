@@ -1,9 +1,17 @@
 @extends('layouts.app')
 
 @push('styles')
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/assets/dist/css/adminlte.min.css">
 @endpush
 
 @push('scripts')
+  <!-- overlayScrollbars -->
+  <script src="/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="/assets/dist/js/adminlte.js"></script>
 @endpush
 
 @section('title', 'Employee Dashboard')
