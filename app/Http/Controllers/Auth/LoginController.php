@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -48,15 +49,22 @@ class LoginController extends Controller
       'password' => 'required',
     ]);
 
-    if (auth()->attempt(array('email' => $input['email'], 'password' => $input['password']))) {
+    if (Auth::attempt(array('email' => $input['email'], 'password' => $input['password']))) {
+      // check employee status
+      if (auth()->user()->status == 'pending') {
+        return response()->view('errors.check-activation');
+      }
+
+      // check employee type
       if (auth()->user()->type == 'admin') {
         return redirect()->route('admin.home');
       } else {
         return redirect()->route('home');
       }
     } else {
-      return redirect()->route('login')
-        ->with('error', 'Email-Address And Password Are Wrong.');
+      return back()->withErrors([
+        'email' => 'The provided credentials do not match our records.',
+      ])->withInput($request->except('password'));
     }
   }
 }
