@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -29,4 +30,13 @@ Route::middleware(['auth', 'employee-access:admin'])->prefix('admin')->group(fun
     Route::get('', [AdminController::class, 'index'])->name('admin.home');
 
     Route::resource('employees', EmployeeController::class);
+});
+
+Route::get('/verify-account', function () {
+    return view('errors.check-activation');
+});
+
+Route::controller(GoogleController::class)->group(function () {
+    Route::get('auth/google', 'redirectToGoogle')->name('auth.google');
+    Route::get('auth/google/callback', 'handleGoogleCallback');
 });

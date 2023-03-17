@@ -52,7 +52,7 @@ class LoginController extends Controller
     if (Auth::attempt(array('email' => $input['email'], 'password' => $input['password']))) {
       // check employee status
       if (auth()->user()->status == 'pending') {
-        return response()->view('errors.check-activation');
+        return redirect('/verify-account');
       }
 
       // check employee type
