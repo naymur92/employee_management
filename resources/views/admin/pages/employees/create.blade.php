@@ -57,7 +57,8 @@
 
   <script>
     $(document).ready(function() {
-      var content = $('#contact-fields').html();
+      var content =
+        '<div class="row"><div class="col-sm-12 col-md-6"><div class="form-group"><label><strong>Name</strong></label><div class="input-group mb-3"><input type="text" name="contact_name[]" class="form-control"><div class="input-group-append"><span class="input-group-text"><i class="fas fa-user"></i></span></div></div></div></div><div class="col-sm-12 col-md-6"><div class="form-group"><label><strong>Email</strong></label><div class="input-group mb-3"><input type="email" name="contact_email[]" class="form-control"><div class="input-group-append"><span class="input-group-text"><i class="fas fa-envelope"></i></span></div></div></div></div></div><div class="row"><div class="col-sm-12 col-md-6"><div class="form-group"><label><strong>Phone Number</strong></label><div class="input-group mb-3"><input type="text" name="contact_phone[]" class="form-control"><div class="input-group-append"><span class="input-group-text"><i class="fas fa-phone"></i></span></div></div></div></div><div class="col-sm-12 col-md-6"><div class="form-group"><label><strong>Relation</strong></label><div class="input-group mb-3"><input type="text" name="contact_relation[]" class="form-control"><div class="input-group-append"><span class="input-group-text"><i class="fas fa-people-arrows"></i></span></div></div></div></div></div>';
 
       $('.add-more-btn').click(function(event) {
         event.preventDefault();
@@ -67,9 +68,6 @@
           '</small></legend>' + content + '<i class="fas fa-trash text-danger remove-btn"></i></fieldset>'
 
         $('.contact-body').append(htmlContent);
-
-        console.log(htmlContent);
-
       });
 
       jQuery(document).on('click', '.remove-btn', function() {
@@ -323,82 +321,58 @@
 
                     <fieldset class="fieldset contact">
                       <legend><small>Contact 1</small></legend>
-
-                      <div id="contact-fields">
-                        <div class="row">
-                          <div class="col-sm-12 col-md-6">
-                            <div class="form-group">
-                              <label><strong>Name</strong></label>
-                              <div class="input-group mb-3">
-                                <input type="text" name="contact_name[]" value="{{ old('contact_name.0') }}"
-                                  class="form-control @error('contact_name.*') is-invalid @enderror">
-                                <div class="input-group-append">
-                                  <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                </div>
-                              </div>
-
-                              @error('contact_name.*')
-                                <span class="invalid-feedback" role="alert">
-                                  <strong>{{ $message }}</strong>
-                                </span>
-                              @enderror
-                            </div>
-                          </div>
-                          <div class="col-sm-12 col-md-6">
-                            <div class="form-group">
-                              <label><strong>Email</strong></label>
-                              <div class="input-group mb-3">
-                                <input type="email" name="contact_email[]" value="{{ old('contact_email.0') }}"
-                                  class="form-control @error('contact_email.*') is-invalid @enderror">
-                                <div class="input-group-append">
-                                  <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                </div>
+                      <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                          <div class="form-group">
+                            <label><strong>Name</strong></label>
+                            <div class="input-group mb-3">
+                              <input type="text" name="contact_name[]" value="{{ old('contact_name.0') }}"
+                                class="form-control">
+                              <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
                               </div>
                             </div>
                           </div>
                         </div>
-
-                        <div class="row">
-                          <div class="col-sm-12 col-md-6">
-                            <div class="form-group">
-                              <label><strong>Phone Number</strong></label>
-                              <div class="input-group mb-3">
-                                <input type="text" name="contact_phone[]" value="{{ old('contact_phone.0') }}"
-                                  class="form-control @error('contact_phone.*') is-invalid @enderror">
-                                <div class="input-group-append">
-                                  <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                </div>
+                        <div class="col-sm-12 col-md-6">
+                          <div class="form-group">
+                            <label><strong>Email</strong></label>
+                            <div class="input-group mb-3">
+                              <input type="email" name="contact_email[]" value="{{ old('contact_email.0') }}"
+                                class="form-control">
+                              <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                               </div>
-
-                              @error('contact_phone.*')
-                                <span class="invalid-feedback" role="alert">
-                                  <strong>{{ $message }}</strong>
-                                </span>
-                              @enderror
-                            </div>
-                          </div>
-                          <div class="col-sm-12 col-md-6">
-                            <div class="form-group">
-                              <label><strong>Relation</strong></label>
-                              <div class="input-group mb-3">
-                                <input type="text" name="contact_relation[]"
-                                  value="{{ old('contact_relation.0') }}"
-                                  class="form-control @error('contact_relation.*') is-invalid @enderror">
-                                <div class="input-group-append">
-                                  <span class="input-group-text"><i class="fas fa-people-arrows"></i></span>
-                                </div>
-                              </div>
-
-                              @error('contact_relation.*')
-                                <span class="invalid-feedback" role="alert">
-                                  <strong>{{ $message }}</strong>
-                                </span>
-                              @enderror
                             </div>
                           </div>
                         </div>
                       </div>
-
+                      <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                          <div class="form-group">
+                            <label><strong>Phone Number</strong></label>
+                            <div class="input-group mb-3">
+                              <input type="text" name="contact_phone[]" value="{{ old('contact_phone.0') }}"
+                                class="form-control">
+                              <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                          <div class="form-group">
+                            <label><strong>Relation</strong></label>
+                            <div class="input-group mb-3">
+                              <input type="text" name="contact_relation[]" value="{{ old('contact_relation.0') }}"
+                                class="form-control">
+                              <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-people-arrows"></i></span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </fieldset>
 
                     <button class="btn btn-primary add-more-btn"><i class="fas fa-plus mr-2"></i>Add More
@@ -407,6 +381,8 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
+                  <a class="btn btn-primary" href="{{ route('employees.index') }}"><i class="fas fa-angle-left"></i>
+                    Back</a>
                   <input type="submit" value="Add Employee" class="btn btn-success float-right">
                 </div>
               </div>

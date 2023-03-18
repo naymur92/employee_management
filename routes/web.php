@@ -30,6 +30,12 @@ Route::middleware(['auth', 'employee-access:admin'])->prefix('admin')->group(fun
     Route::get('', [AdminController::class, 'index'])->name('admin.home');
 
     Route::resource('employees', EmployeeController::class);
+
+    // delete contact
+    Route::delete('employees/delete-contact/{id}', [EmployeeController::class, 'delete_contact'])->name('employees.delete_contact');
+
+    // change employee status
+    Route::put('employees/change-emp-status/{id}', [EmployeeController::class, 'change_employee_status'])->name('employees.change_emp_status');
 });
 
 Route::get('/verify-account', function () {

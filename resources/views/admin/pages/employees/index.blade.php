@@ -37,6 +37,7 @@
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
+        'order': [],
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });
@@ -94,7 +95,39 @@
                         <td>{{ $item->status }}</td>
                         <td>{{ $item->type }}</td>
                         <td>{{ date('d M, Y - h:i a', strtotime($item->created_at)) }}</td>
-                        <td></td>
+                        <td>
+                          <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Action
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item" href="{{ route('employees.show', $item->id) }}"><i
+                                  class="fa fa-eye text-primary"></i> View</a>
+                              @if (!$item->type == 'admin' || $item->id != Auth::user()->id)
+                                <a class="dropdown-item" href="{{ route('employees.edit', $item->id) }}"><i
+                                    class="fa fa-pen text-warning"></i> Edit</a>
+
+                                @if ($item->status == 'pending')
+                                  <form action="{{ route('employees.change_emp_status', $item->id) }}" method="post">
+                                    @csrf
+                                    @method('put')
+                                    <input type="number" name="status" value="1" hidden>
+                                    <button class="dropdown-item"><i class="fa fa-check text-success"></i>
+                                      Confirm</button>
+                                  </form>
+                                @endif
+
+                                <form action="{{ route('employees.destroy', $item->id) }}"
+                                  onsubmit="return confirm('Are you want to sure to delete?')" method="post">
+                                  @csrf
+                                  @method('delete')
+                                  <button class="dropdown-item"><i class="fa fa-trash text-danger"></i> Delete</button>
+                                </form>
+                              @endif
+                            </div>
+                          </div>
+                        </td>
                       </tr>
                     @endforeach
                   </tbody>

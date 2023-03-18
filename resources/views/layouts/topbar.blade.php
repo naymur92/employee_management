@@ -68,7 +68,7 @@
         <i class="fas fa-user-shield"></i>
       </a>
       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-        <span class="dropdown-item dropdown-header">{{ auth()->user()->name }}</span>
+        <span class="dropdown-item dropdown-header">{{ auth()->user()->name }} ({{ auth()->user()->type }})</span>
         <div class="dropdown-divider"></div>
         <a href="#" class="dropdown-item">
           <i class="fas fa-user mr-2"></i> Profile
@@ -78,9 +78,9 @@
           <i class="fas fa-users mr-2"></i> Contacts
         </a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="{{ route('logout') }}"
+        <a class="dropdown-item d-flex justify-content-end" href="{{ route('logout') }}"
           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-          <button class="btn btn-danger float-right">{{ __('Logout') }}</button>
+          <button class="btn btn-outline-danger">{{ __('Logout') }}</button>
         </a>
 
         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

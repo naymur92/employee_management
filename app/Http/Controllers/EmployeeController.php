@@ -17,7 +17,7 @@ class EmployeeController extends Controller
    */
   public function index()
   {
-    $employees = Employee::get();
+    $employees = Employee::orderBy('created_at', 'desc')->get();
     return view('admin.pages.employees.index', compact('employees'));
   }
 
@@ -48,9 +48,6 @@ class EmployeeController extends Controller
       'gender' => 'required',
       'dob' => 'required',
       'photo' => 'required|mimes:jpg,jpeg,png|max:2000',
-      // 'contact_name.*' => 'required',
-      // 'contact_phone.*' => 'numeric',
-      // 'contact_relation.*' => 'required',
     ]);
 
     $employee = Employee::create([
@@ -110,7 +107,7 @@ class EmployeeController extends Controller
    */
   public function show(Employee $employee)
   {
-    //
+    return view('admin.pages.employees.show', compact('employee'));
   }
 
   /**
@@ -121,7 +118,7 @@ class EmployeeController extends Controller
    */
   public function edit(Employee $employee)
   {
-    //
+    return view('admin.pages.employees.edit', compact('employee'));
   }
 
   /**
@@ -133,7 +130,86 @@ class EmployeeController extends Controller
    */
   public function update(Request $request, Employee $employee)
   {
-    //
+    $request->validate([
+      'name' => 'required|min:4',
+      'email' => 'required|email|unique:employees,email,' . $employee->id,
+      'status' => 'required',
+      'type' => 'required',
+      'jobtitle' => 'required',
+      'gender' => 'required',
+      'dob' => 'required',
+      'photo' => 'mimes:jpg,jpeg,png|max:2000',
+    ]);
+
+    $data['name'] = $request->name;
+    $data['email'] = $request->email;
+    $data['status'] = $request->status;
+    $data['type'] = $request->type;
+
+    if ($employee->update($data)) {
+      flash()->addSuccess('Employee Updated');
+    }
+
+    // update employee detail
+    if ($employee->detail) {
+      $old_img = $employee->detail->photo;
+    }
+
+    if ($image = $request->file('photo')) {
+      // Delete old file
+      if ($employee->detail && $old_img != 'no_image.jpg') {
+        unlink(public_path('assets/images/employees_photos/' . $old_img));
+      }
+
+      $fileName = '(' . $employee->id . ').' . $image->extension();
+      $image->move(public_path('assets/images/employees_photos'), $fileName);
+      $emp_detail['photo'] = $fileName;
+    }
+
+    $emp_detail['job_title'] = $request->jobtitle;
+    $emp_detail['address'] = $request->address;
+    $emp_detail['gender'] = $request->gender;
+    $emp_detail['dob'] = $request->dob;
+
+    if ($employee->detail) {
+      if ($employee->detail->update($emp_detail)) {
+        flash()->addSuccess('Employee Detail Updated');
+      }
+    } else {
+      $emp_detail['employee_id'] = $employee->id;
+      $emp_detail['photo'] = 'no_image.jpg';
+      if (EmployeeDetail::create($emp_detail)) {
+        flash()->addSuccess('Employee Detail Added');
+      }
+    }
+
+    $contact_length = count($request->contact_name);
+
+    for ($i = 0; $i < $contact_length; $i++) {
+      if ($request->contact_name[$i] == '' || $request->contact_phone[$i] == '' || $request->contact_relation[$i] == '') continue;
+
+      if (isset($request->contact_id[$i])) {
+        $emp_contact = EmployeeContact::findOrFail($request->contact_id[$i]);
+        $emp_contact->update([
+          'contact_name' => $request->contact_name[$i],
+          'contact_email' => $request->contact_email[$i],
+          'contact_phone' => $request->contact_phone[$i],
+          'contact_relation' => $request->contact_relation[$i],
+        ]);
+        flash()->addSuccess('Employee Contact Updated');
+        continue;
+      }
+
+      EmployeeContact::create([
+        'employee_id' => $employee->id,
+        'contact_name' => $request->contact_name[$i],
+        'contact_email' => $request->contact_email[$i],
+        'contact_phone' => $request->contact_phone[$i],
+        'contact_relation' => $request->contact_relation[$i],
+      ]);
+      flash()->addSuccess('Employee Contacts Added');
+    }
+    return redirect(route('employees.index'));
   }
 
   /**
@@ -144,6 +220,35 @@ class EmployeeController extends Controller
    */
   public function destroy(Employee $employee)
   {
-    //
+    $employee->delete();
+    flash()->addSuccess('Employee Deleted');
+
+    return redirect(route('employees.index'));
+  }
+
+  // delete contact according to employees
+  public function delete_contact($id)
+  {
+
+    $contact = EmployeeContact::findOrFail($id);
+    $contact->delete();
+    flash()->addSuccess('Contact Deleted');
+
+    return response()->json(['success' => true]);
+  }
+
+  // confirm employee
+  public function change_employee_status(Request $request, $id)
+  {
+    $employee = Employee::findOrFail($id);
+
+    $status = $request->status;
+
+    $employee->status = $status;
+    $employee->save();
+
+    flash()->addSuccess('Status Updated');
+
+    return redirect(route('employees.index'));
   }
 }
