@@ -66,11 +66,23 @@
                   </tr>
                   <tr>
                     <th>Status:</th>
-                    <td>{{ $employee->status }}</td>
+                    <td>
+                      @if ($employee->status == 'pending')
+                        <span class="badge badge-warning">{{ $employee->status }}</span>
+                      @else
+                        <span class="badge badge-success">{{ $employee->status }}</span>
+                      @endif
+                    </td>
                   </tr>
                   <tr>
                     <th>Type:</th>
-                    <td>{{ $employee->type }}</td>
+                    <td>
+                      @if ($employee->type == 'employee')
+                        <span class="badge badge-info">{{ $employee->type }}</span>
+                      @else
+                        <span class="badge badge-primary">{{ $employee->type }}</span>
+                      @endif
+                    </td>
                   </tr>
                   <tr>
                     <th>Joined At:</th>

@@ -92,8 +92,20 @@
                       <tr>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->email }}</td>
-                        <td>{{ $item->status }}</td>
-                        <td>{{ $item->type }}</td>
+                        <td>
+                          @if ($item->status == 'pending')
+                            <span class="badge badge-warning">{{ $item->status }}</span>
+                          @else
+                            <span class="badge badge-success">{{ $item->status }}</span>
+                          @endif
+                        </td>
+                        <td>
+                          @if ($item->type == 'employee')
+                            <span class="badge badge-info">{{ $item->type }}</span>
+                          @else
+                            <span class="badge badge-primary">{{ $item->type }}</span>
+                          @endif
+                        </td>
                         <td>{{ date('d M, Y - h:i a', strtotime($item->created_at)) }}</td>
                         <td>
                           <div class="dropdown">

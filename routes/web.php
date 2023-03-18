@@ -28,6 +28,9 @@ Route::middleware(['auth', 'employee-access:employee'])->group(function () {
 
   // attendances for employee
   Route::get('attendances/history', [EmployeeAttendanceController::class, 'employee_attendances'])->name('attendances.history');
+
+  Route::get('/employee-reports', [HomeController::class, 'employee_reports_query'])->name('emp_reports.query');
+  Route::post('/employee-reports', [HomeController::class, 'employee_reports_generate'])->name('emp_reports.generate');
 });
 
 // Admin part

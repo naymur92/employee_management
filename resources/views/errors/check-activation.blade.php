@@ -28,10 +28,11 @@
     <h1 class="w3-jumbo w3-animate-top w3-center"><code>Access Denied</code></h1>
     <hr class="w3-border-white w3-animate-left" style="margin:auto;width:50%">
     <h3 class="w3-center w3-animate-right">Account Not Activated</h3>
+    <h3 class="w3-center w3-animate-right">Please Login after account activation</h3>
     <h3 class="w3-center w3-animate-zoom">🚫🚫🚫🚫</h3>
     <a class="w3-center w3-animate-left" href="{{ route('logout') }}"
       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-      <button class="btn btn-danger float-right">{{ __('Logout') }}</button>
+      <button class="btn btn-danger" style="float:right">{{ __('Logout') }}</button>
     </a>
 
     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

@@ -44,7 +44,7 @@
   </script>
 @endpush
 
-@section('title', 'Attendance List')
+@section('title', 'Attendance List - ' . auth()->user()->id)
 
 @section('content')
   <div class="content-wrapper">
@@ -57,7 +57,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
               <li class="breadcrumb-item active">Attendance List</li>
             </ol>
           </div>
@@ -70,17 +70,32 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-            <div class="card">
+            <div class="card mt-5">
               <div class="card-header">
-                <h3 class="card-title">Attendances</h3>
+                <h3 class="card-title">Attendance Summary of {{ auth()->user()->name }}</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body d-flex justify-content-center">
+                <table class="table table-striped">
+                  @foreach ($data as $key => $item)
+                    <tr>
+                      <th>{{ $key }}</th>
+                      <td>{{ $item }}</td>
+                    </tr>
+                  @endforeach
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <div class="card mt-5">
+              <div class="card-header">
+                <h3 class="card-title">Attendance Report of {{ auth()->user()->name }}</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped text-center">
                   <thead>
                     <tr>
-                      <th>Name</th>
-                      <th>Job Title</th>
                       <th>Date</th>
                       <th>Entry Time (09:00 am)</th>
                       <th>Exit Time (05:00 pm)</th>
@@ -90,76 +105,63 @@
                   <tbody>
                     @foreach ($attendances as $item)
                       <tr>
-                        <td>{{ $item->employee->name }}</td>
-                        <td>{{ $item->employee->detail->job_title ?? '' }}</td>
                         <td>{{ date('d M, Y', strtotime($item->date)) }}</td>
-                        @isset($item->entry_time)
-                          {{-- check late entry --}}
-                          <td>
-                            <?php
-                            $in_time = strtotime('09:00:59');
-                            $entry_time = strtotime($item->entry_time);
-                            ?>
-                            @if ($in_time - $entry_time < 0)
-                              <span class="badge badge-danger">{{ date('h:i a', strtotime($item->entry_time)) }}</span>
-                            @else
-                              <span class="badge badge-success">{{ date('h:i a', strtotime($item->entry_time)) }}</span>
-                            @endif
-                          </td>
-                        @else
-                          <td></td>
-                        @endisset
-                        @isset($item->exit_time)
-                          {{-- check early leave --}}
-                          <td>
-                            <?php
-                            $out_time = strtotime('17:00:00');
-                            $exit_time = strtotime($item->exit_time);
-                            ?>
-                            @if ($exit_time - $out_time < 0)
-                              <span class="badge badge-danger">{{ date('h:i a', strtotime($item->exit_time)) }}</span>
-                            @else
-                              <span class="badge badge-success">{{ date('h:i a', strtotime($item->exit_time)) }}</span>
-                            @endif
-                          </td>
-                        @else
-                          <td></td>
-                        @endisset
+
+                        {{-- check late entry --}}
                         <td>
-                          @if ($item->entry_time != '' && $item->exit_time != '')
-                            <?php
-                            $time1 = $item->entry_time; // first time in hours:minutes format
-                            $time2 = $item->exit_time; // second time in hours:minutes format
-                            
-                            // Convert times to minutes
-                            $minutes1 = strtotime($time1) / 60;
-                            $minutes2 = strtotime($time2) / 60;
-                            
-                            // Calculate the difference in minutes
-                            $diff_minutes = $minutes2 - $minutes1;
-                            
-                            // Convert the difference back to hours and minutes
-                            $hours = floor($diff_minutes / 60);
-                            $minutes = $diff_minutes % 60;
-                            ?>
-                            @if ($hours < 8)
-                              <span class="badge badge-danger">{{ $hours }} Hours : {{ $minutes }}
-                                Minutes</span>
-                            @else
-                              <span class="badge badge-success">{{ $hours }} Hours : {{ $minutes }}
-                                Minutes</span>
-                            @endif
+                          <?php
+                          $in_time = strtotime('09:00:59');
+                          $entry_time = strtotime($item->entry_time);
+                          ?>
+                          @if ($in_time - $entry_time < 0)
+                            <span class="badge badge-danger">{{ date('h:i a', strtotime($item->entry_time)) }}</span>
                           @else
-                            N/A
+                            <span class="badge badge-success">{{ date('h:i a', strtotime($item->entry_time)) }}</span>
                           @endif
+                        </td>
+
+                        {{-- check early leave --}}
+                        <td>
+                          <?php
+                          $out_time = strtotime('17:00:00');
+                          $exit_time = strtotime($item->exit_time);
+                          ?>
+                          @if ($exit_time - $out_time < 0)
+                            <span class="badge badge-danger">{{ date('h:i a', strtotime($item->exit_time)) }}</span>
+                          @else
+                            <span class="badge badge-success">{{ date('h:i a', strtotime($item->exit_time)) }}</span>
+                          @endif
+                        </td>
+                        <td>
+                          <?php
+                          $time1 = $item->entry_time; // first time in hours:minutes format
+                          $time2 = $item->exit_time; // second time in hours:minutes format
+                          
+                          // Convert times to minutes
+                          $minutes1 = strtotime($time1) / 60;
+                          $minutes2 = strtotime($time2) / 60;
+                          
+                          // Calculate the difference in minutes
+                          $diff_minutes = $minutes2 - $minutes1;
+                          
+                          // Convert the difference back to hours and minutes
+                          $hours = floor($diff_minutes / 60);
+                          $minutes = $diff_minutes % 60;
+                          ?>
+                          @if ($hours < 8)
+                            <span class="badge badge-danger">{{ $hours }} Hours : {{ $minutes }}
+                              Minutes</span>
+                          @else
+                            <span class="badge badge-success">{{ $hours }} Hours : {{ $minutes }}
+                              Minutes</span>
+                          @endif
+
                         </td>
                       </tr>
                     @endforeach
                   </tbody>
                   <tfoot>
                     <tr>
-                      <th>Name</th>
-                      <th>Job Title</th>
                       <th>Date</th>
                       <th>Entry Time (09:00 am)</th>
                       <th>Exit Time (05:00 pm)</th>

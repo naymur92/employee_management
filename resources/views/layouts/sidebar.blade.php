@@ -113,6 +113,16 @@ function isActive($routeName)
               </p>
             </a>
           </li>
+
+          <li class="nav-item">
+            <a href="{{ route('emp_reports.query') }}"
+              class="nav-link {{ isActive('emp_reports.query') }} {{ isActive('emp_reports.generate') }}">
+              <i class="nav-icon far fa-list-alt"></i>
+              <p>
+                Generate Report
+              </p>
+            </a>
+          </li>
         @endif
 
       </ul>

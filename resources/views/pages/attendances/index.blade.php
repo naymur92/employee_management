@@ -76,12 +76,12 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-bordered table-striped text-center">
                   <thead>
                     <tr>
                       <th>Date</th>
-                      <th>Entry Time</th>
-                      <th>Exit Time</th>
+                      <th>Entry Time (09:00 am)</th>
+                      <th>Exit Time (05:00 pm)</th>
                       <th>Total Time</th>
                     </tr>
                   </thead>
@@ -90,12 +90,34 @@
                       <tr>
                         <td>{{ date('d M, Y', strtotime($item->date)) }}</td>
                         @isset($item->entry_time)
-                          <td>{{ date('h:i a', strtotime($item->entry_time)) }}</td>
+                          {{-- check late entry --}}
+                          <td>
+                            <?php
+                            $in_time = strtotime('09:00:59');
+                            $entry_time = strtotime($item->entry_time);
+                            ?>
+                            @if ($in_time - $entry_time < 0)
+                              <span class="badge badge-danger">{{ date('h:i a', strtotime($item->entry_time)) }}</span>
+                            @else
+                              <span class="badge badge-success">{{ date('h:i a', strtotime($item->entry_time)) }}</span>
+                            @endif
+                          </td>
                         @else
                           <td></td>
                         @endisset
-                        @isset($item->entry_time)
-                          <td>{{ date('h:i a', strtotime($item->exit_time)) }}</td>
+                        @isset($item->exit_time)
+                          {{-- check early leave --}}
+                          <td>
+                            <?php
+                            $out_time = strtotime('17:00:00');
+                            $exit_time = strtotime($item->exit_time);
+                            ?>
+                            @if ($exit_time - $out_time < 0)
+                              <span class="badge badge-danger">{{ date('h:i a', strtotime($item->exit_time)) }}</span>
+                            @else
+                              <span class="badge badge-success">{{ date('h:i a', strtotime($item->exit_time)) }}</span>
+                            @endif
+                          </td>
                         @else
                           <td></td>
                         @endisset
@@ -115,9 +137,14 @@
                             // Convert the difference back to hours and minutes
                             $hours = floor($diff_minutes / 60);
                             $minutes = $diff_minutes % 60;
-                            
-                            echo $hours . ' hours : ' . $minutes . ' minutes';
                             ?>
+                            @if ($hours < 8)
+                              <span class="badge badge-danger">{{ $hours }} Hours : {{ $minutes }}
+                                Minutes</span>
+                            @else
+                              <span class="badge badge-success">{{ $hours }} Hours : {{ $minutes }}
+                                Minutes</span>
+                            @endif
                           @else
                             N/A
                           @endif
@@ -128,8 +155,8 @@
                   <tfoot>
                     <tr>
                       <th>Date</th>
-                      <th>Entry Time</th>
-                      <th>Exit Time</th>
+                      <th>Entry Time (09:00 am)</th>
+                      <th>Exit Time (05:00 pm)</th>
                       <th>Total Time</th>
                     </tr>
                   </tfoot>
