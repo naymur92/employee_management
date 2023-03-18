@@ -7,6 +7,25 @@
     <li class="nav-item d-none d-sm-inline-block">
       <a href="{{ auth()->user()->type == 'admin' ? route('admin.home') : route('home') }}" class="nav-link">Home</a>
     </li>
+    @if (Route::currentRouteName() == 'home' || Route::currentRouteName() == 'admin.home')
+      @if (!isset($if_att_exists->entry_time) || $if_att_exists->entry_time == '')
+        <li class="nav-item d-none d-sm-inline-block">
+          <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#staticBackdrop">
+            Start Attendance
+          </button>
+        </li>
+      @endif
+      @if (isset($if_att_exists->entry_time) && $if_att_exists->entry_time != '' && $if_att_exists->exit_time == '')
+        <li class="nav-item d-none d-sm-inline-block">
+          <form action="{{ route('end-attendance') }}" method="post">
+            @csrf
+            <button class="btn btn-outline-success ml-2">
+              End Attendance
+            </button>
+          </form>
+        </li>
+      @endif
+    @endif
 
   </ul>
 
@@ -70,11 +89,11 @@
       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         <span class="dropdown-item dropdown-header">{{ auth()->user()->name }} ({{ auth()->user()->type }})</span>
         <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item">
+        <a href="{{ route('profile.show') }}" class="dropdown-item">
           <i class="fas fa-user mr-2"></i> Profile
         </a>
         <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item">
+        <a href="{{ route('profile.contacts') }}" class="dropdown-item">
           <i class="fas fa-users mr-2"></i> Contacts
         </a>
         <div class="dropdown-divider"></div>
@@ -90,3 +109,44 @@
     </li>
   </ul>
 </nav>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Start Attendance</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ route('start-attendance') }}" method="post" id="attendance_start_form">
+          @csrf
+        </form>
+        <div class="d-flex justify-content-center">
+          {{-- push button --}}
+          <button class="button-hold">
+            <div>
+              <svg class="icon" viewBox="0 0 16 16">
+                <polygon points="1.3,6.7 2.7,8.1 7,3.8 7,16 9,16 9,3.8 13.3,8.1 14.7,6.7 8,0"></polygon>
+              </svg>
+              <svg class="progress" viewBox="0 0 32 32">
+                <circle r="8" cx="16" cy="16" />
+              </svg>
+              <svg class="tick" viewBox="0 0 24 24">
+                <polyline points="18,7 11,16 6,12" />
+              </svg>
+            </div>
+          </button>
+        </div>
+        <div class="d-flex justify-content-center mt-2">
+          <h4>Push to confirm</h4>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

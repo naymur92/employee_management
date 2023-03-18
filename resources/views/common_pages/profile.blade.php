@@ -12,7 +12,7 @@
   <script src="/assets/dist/js/adminlte.js"></script>
 @endpush
 
-@section('title', 'Show Employee')
+@section('title', 'Profile')
 
 @section('content')
   <div class="content-wrapper">
@@ -21,13 +21,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Show Employee</h1>
+            <h1>My Profile</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{ route('employees.index') }}">Employees</a></li>
-              <li class="breadcrumb-item active">Show Employee</li>
+              <li class="breadcrumb-item"><a
+                  href="{{ auth()->user()->type == 'admin' ? route('admin.home') : route('home') }}">Home</a></li>
+              <li class="breadcrumb-item active">Profile</li>
             </ol>
           </div>
         </div>
@@ -41,7 +41,7 @@
           <div class="col-sm-12 col-md-6">
             <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title">{{ $employee->name }}</h3>
+                <h3 class="card-title">Profile of {{ $employee->name }}</h3>
               </div>
               <div class="card-body">
                 <table class="table table-striped">
@@ -63,14 +63,6 @@
                   <tr>
                     <th>Email:</th>
                     <td>{{ $employee->email }}</td>
-                  </tr>
-                  <tr>
-                    <th>Status:</th>
-                    <td>{{ $employee->status }}</td>
-                  </tr>
-                  <tr>
-                    <th>Type:</th>
-                    <td>{{ $employee->type }}</td>
                   </tr>
                   <tr>
                     <th>Joined At:</th>
@@ -121,39 +113,13 @@
                 </table>
               </div>
               <!-- /.card-body -->
-              <div class="card-footer d-flex justify-content-between">
-                <a class="btn btn-primary" href="{{ route('employees.index') }}"><i class="fas fa-angle-left"></i>
+              <div class="card-footer">
+                <a class="btn btn-primary"
+                  href="{{ auth()->user()->type == 'admin' ? route('admin.home') : route('home') }}"><i
+                    class="fas fa-angle-left"></i>
                   Back</a>
-                @if (!$employee->type == 'admin' || $employee->id != Auth::user()->id)
-                  <a class="btn btn-warning" href="{{ route('employees.edit', $employee->id) }}"><i
-                      class="fa fa-pen"></i>
-                    Edit</a>
-                  @if ($employee->status == 'confirmed')
-                    <form action="{{ route('employees.change_emp_status', $employee->id) }}" method="post">
-                      @csrf
-                      @method('put')
-                      <input type="number" name="status" value="0" hidden>
-                      <button class="btn btn-warning"><i class="fa fa-times"></i> Make
-                        Pending</button>
-                    </form>
-                  @endif
-                  @if ($employee->status == 'pending')
-                    <form action="{{ route('employees.change_emp_status', $employee->id) }}" method="post">
-                      @csrf
-                      @method('put')
-                      <input type="number" name="status" value="1" hidden>
-                      <button class="btn btn-success"><i class="fa fa-check"></i>
-                        Confirm</button>
-                    </form>
-                  @endif
-
-                  <form action="{{ route('employees.destroy', $employee->id) }}"
-                    onsubmit="return confirm('Are you want to sure to delete?')" method="post">
-                    @csrf
-                    @method('delete')
-                    <button class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
-                  </form>
-                @endif
+                <a class="btn btn-warning float-right" href="{{ route('profile.edit') }}"><i class="fa fa-pen"></i>
+                  Edit Profile</a>
               </div>
             </div>
 

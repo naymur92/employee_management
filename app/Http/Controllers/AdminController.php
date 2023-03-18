@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EmployeeAttendance;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -18,6 +19,12 @@ class AdminController extends Controller
 
   public function index()
   {
-    return view('admin');
+    $emp_id = auth()->user()->id;
+    $date = date('Y-m-d');
+
+    $if_att_exists = EmployeeAttendance::where('employee_id', $emp_id)->where('date', $date)->first();
+
+    // var_dump($if_att_exists);
+    return view('admin', compact('if_att_exists'));
   }
 }

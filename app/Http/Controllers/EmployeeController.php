@@ -6,10 +6,21 @@ use App\Models\Employee;
 use App\Models\EmployeeContact;
 use App\Models\EmployeeDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
+  /**
+   * Create a new controller instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    $this->middleware('auth');
+  }
+
   /**
    * Display a listing of the resource.
    *
@@ -118,6 +129,10 @@ class EmployeeController extends Controller
    */
   public function edit(Employee $employee)
   {
+    if ($employee->type == 'admin' || $employee->id == Auth::user()->id) {
+      flash()->addError('Unauthorized Access');
+      return redirect(route('employees.index'));
+    }
     return view('admin.pages.employees.edit', compact('employee'));
   }
 
@@ -249,6 +264,7 @@ class EmployeeController extends Controller
 
     flash()->addSuccess('Status Updated');
 
-    return redirect(route('employees.index'));
+    return back();
+    // return redirect(route('employees.index'));
   }
 }

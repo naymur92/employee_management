@@ -18,6 +18,9 @@
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="/assets/plugins/fontawesome-free/css/all.min.css">
 
+  {{-- push button --}}
+  <link rel="stylesheet" href="/assets/push-button/style.css">
+
   <!-- Styles -->
   {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
 
@@ -50,6 +53,9 @@
   <script src="/assets/plugins/jquery/jquery.min.js"></script>
   <!-- Bootstrap -->
   <script src="/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  {{-- push button --}}
+  <script src="/assets/push-button/script.js"></script>
 
   <!-- PAGE PLUGINS -->
   @stack('scripts')

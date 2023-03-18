@@ -70,4 +70,9 @@ class Employee extends Authenticatable
   {
     return $this->hasMany(related: EmployeeContact::class, foreignKey: 'employee_id');
   }
+
+  public function attendances()
+  {
+    return $this->hasMany(related: EmployeeAttendance::class, foreignKey: 'employee_id');
+  }
 }

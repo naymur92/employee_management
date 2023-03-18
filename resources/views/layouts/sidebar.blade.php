@@ -93,8 +93,26 @@ function isActive($routeName)
               </li>
             </ul>
           </li>
+
+          <li class="nav-item">
+            <a href="{{ route('attendances.index') }}" class="nav-link {{ isActive('attendances.index') }}">
+              <i class="nav-icon far fa-clock"></i>
+              <p>
+                Attendances
+              </p>
+            </a>
+          </li>
         @else
           {{-- Employees Section --}}
+
+          <li class="nav-item">
+            <a href="{{ route('attendances.history') }}" class="nav-link {{ isActive('attendances.history') }}">
+              <i class="nav-icon fas fa-history"></i>
+              <p>
+                Attendance History
+              </p>
+            </a>
+          </li>
         @endif
 
       </ul>

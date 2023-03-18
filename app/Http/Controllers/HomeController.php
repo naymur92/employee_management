@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EmployeeAttendance;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +24,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $emp_id = auth()->user()->id;
+        $date = date('Y-m-d');
+
+        $if_att_exists = EmployeeAttendance::where('employee_id', $emp_id)->where('date', $date)->first();
+        return view('home', compact('if_att_exists'));
     }
 }
