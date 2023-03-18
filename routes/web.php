@@ -53,7 +53,9 @@ Route::middleware(['auth'])->group(function () {
 
   Route::get('show-profile', [CommonController::class, 'show_profile'])->name('profile.show');
   Route::get('edit-profile', [CommonController::class, 'edit_profile'])->name('profile.edit');
+  Route::post('update-profile/{id}', [CommonController::class, 'update_profile'])->name('profile.update');
   Route::get('view-contacts', [CommonController::class, 'view_contacts'])->name('profile.contacts');
+  Route::delete('edit-profile/delete-contact/{id}', [CommonController::class, 'delete_contact'])->name('profile.delete_contact');
 });
 
 Route::get('/verify-account', function () {

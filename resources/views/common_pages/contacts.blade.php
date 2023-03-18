@@ -63,7 +63,7 @@
                       </td>
                     </tr>
                   @empty
-                    No Contact Founds!!
+                    No Contact Found!!
                   @endforelse
 
                 </table>

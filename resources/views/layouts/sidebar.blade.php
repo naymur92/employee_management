@@ -47,7 +47,7 @@ function isActive($routeName)
 
       </div>
       <div class="info">
-        <a href="#" class="d-block">{{ auth()->user()->name }}</a>
+        <a href="{{ route('profile.show') }}" class="d-block">{{ auth()->user()->name }}</a>
       </div>
     </div>
 

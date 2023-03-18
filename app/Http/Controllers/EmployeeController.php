@@ -235,6 +235,10 @@ class EmployeeController extends Controller
    */
   public function destroy(Employee $employee)
   {
+    if (isset($employee->detail) && $employee->detail->photo != 'no_image.jpg') {
+      unlink(public_path('assets/images/employees_photos/' . $employee->detail->photo));
+    }
+
     $employee->delete();
     flash()->addSuccess('Employee Deleted');
 
@@ -244,7 +248,6 @@ class EmployeeController extends Controller
   // delete contact according to employees
   public function delete_contact($id)
   {
-
     $contact = EmployeeContact::findOrFail($id);
     $contact->delete();
     flash()->addSuccess('Contact Deleted');
