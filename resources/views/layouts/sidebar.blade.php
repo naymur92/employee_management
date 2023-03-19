@@ -95,10 +95,21 @@ function isActive($routeName)
           </li>
 
           <li class="nav-item">
-            <a href="{{ route('attendances.index') }}" class="nav-link {{ isActive('attendances.index') }}">
+            <a href="{{ route('attendances.index') }}"
+              class="nav-link {{ isActive('emp.attendances') }} {{ isActive('attendances.index') }}">
               <i class="nav-icon far fa-clock"></i>
               <p>
                 Attendances
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{ route('admin_reports.query') }}"
+              class="nav-link {{ isActive('admin_reports.query') }} {{ isActive('admin_reports.generate') }}">
+              <i class="nav-icon far fa-list-alt"></i>
+              <p>
+                Generate Report
               </p>
             </a>
           </li>

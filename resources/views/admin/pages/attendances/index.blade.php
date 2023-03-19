@@ -90,7 +90,9 @@
                   <tbody>
                     @foreach ($attendances as $item)
                       <tr>
-                        <td>{{ $item->employee->name }}</td>
+                        <td>
+                          <a href="{{ route('employees.show', $item->employee->id) }}">{{ $item->employee->name }}</a>
+                        </td>
                         <td>{{ $item->employee->detail->job_title ?? '' }}</td>
                         <td>{{ date('d M, Y', strtotime($item->date)) }}</td>
                         @isset($item->entry_time)

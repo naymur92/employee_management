@@ -7,15 +7,29 @@
     <li class="nav-item d-none d-sm-inline-block">
       <a href="{{ auth()->user()->type == 'admin' ? route('admin.home') : route('home') }}" class="nav-link">Home</a>
     </li>
-    @if (Route::currentRouteName() == 'home' || Route::currentRouteName() == 'admin.home')
-      @if (!isset($if_att_exists->entry_time) || $if_att_exists->entry_time == '')
+
+    {{-- start attendance --}}
+    @isset(auth()->user()->attendances->last()->date)
+      @if (auth()->user()->attendances->last()->date != date('Y-m-d') &&
+              auth()->user()->attendances->last()->entry_time != '')
         <li class="nav-item d-none d-sm-inline-block">
           <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#staticBackdrop">
             Start Attendance
           </button>
         </li>
       @endif
-      @if (isset($if_att_exists->entry_time) && $if_att_exists->entry_time != '' && $if_att_exists->exit_time == '')
+    @else
+      <li class="nav-item d-none d-sm-inline-block">
+        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#staticBackdrop">
+          Start Attendance
+        </button>
+      </li>
+    @endisset
+
+    {{-- end attendance --}}
+    @isset(auth()->user()->attendances->last()->date)
+      @if (auth()->user()->attendances->last()->date == date('Y-m-d') &&
+              auth()->user()->attendances->last()->exit_time == '')
         <li class="nav-item d-none d-sm-inline-block">
           <form action="{{ route('end-attendance') }}" method="post">
             @csrf
@@ -25,7 +39,7 @@
           </form>
         </li>
       @endif
-    @endif
+    @endisset
 
   </ul>
 

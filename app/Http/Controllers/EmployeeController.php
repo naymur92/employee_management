@@ -58,7 +58,7 @@ class EmployeeController extends Controller
       'jobtitle' => 'required',
       'gender' => 'required',
       'dob' => 'required',
-      'photo' => 'required|mimes:jpg,jpeg,png|max:2000',
+      'photo' => 'mimes:jpg,jpeg,png|max:2000',
     ]);
 
     $employee = Employee::create([

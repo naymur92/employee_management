@@ -22,12 +22,19 @@ class EmployeeAttendanceController extends Controller
   // get attendances for admin panel
   public function index()
   {
-    $attendances = EmployeeAttendance::orderBy('updated_at', 'desc')->get();
+    $attendances = EmployeeAttendance::orderBy('date', 'desc')->get();
     return view('admin.pages.attendances.index', compact('attendances'));
   }
 
-  // attendances list for employee
-  public function employee_attendances()
+  // attendances list of specific employee for admin panel
+  public function employee_attendances($id)
+  {
+    $attendances = EmployeeAttendance::where('employee_id', $id)->orderBy('updated_at', 'desc')->get();
+    return view('admin.pages.attendances.index', compact('attendances'));
+  }
+
+  // attendances list for employee panel
+  public function emp_attendances()
   {
     $attendances = EmployeeAttendance::where('employee_id', Auth::user()->id)->orderBy('updated_at', 'desc')->get();
     return view('pages.attendances.index', compact('attendances'));

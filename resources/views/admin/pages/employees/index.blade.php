@@ -114,6 +114,7 @@
                               Action
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
                               <a class="dropdown-item" href="{{ route('employees.show', $item->id) }}"><i
                                   class="fa fa-eye text-primary"></i> View</a>
                               @if (!$item->type == 'admin' || $item->id != Auth::user()->id)
@@ -137,6 +138,8 @@
                                   <button class="dropdown-item"><i class="fa fa-trash text-danger"></i> Delete</button>
                                 </form>
                               @endif
+                              <a class="dropdown-item" href="{{ route('emp.attendances', $item->id) }}"><i
+                                  class="fa fa-clock text-info"></i> View Attendances</a>
                             </div>
                           </div>
                         </td>
