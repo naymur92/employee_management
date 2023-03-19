@@ -32,19 +32,44 @@ class ReportController extends Controller
   // admin report generation
   public function admin_reports_generate(Request $request)
   {
+    $start_date = $request->start_date;
+    $end_date = $request->end_date;
+
+    // if both are selected
+    if ($request->position != '' && $request->employee != '') {
+      flash()->addWarning('Please Select one from Employee and Position');
+      return back();
+    }
+
+    // if only employee selected
+    if ($request->position == '' && $request->employee != '') {
+      $employee = Employee::findOrFail($request->employee);
+      $attendances = EmployeeAttendance::where('employee_id', $request->employee)->where('entry_time', '!=', '')->where('exit_time', '!=', '')->whereBetween('date', [$request->start_date, $request->end_date])->orderBy('date', 'asc')->get();
+
+      // generate data
+      $data = $this->generate_single_data($attendances);
+      return view('admin.pages.reports.single', compact('attendances', 'employee', 'data'));
+    }
+
+
     // if position and employee are not selected
     if ($request->position == '' && $request->employee == '') {
-      $attendances = EmployeeAttendance::where('entry_time', '!=', '')->where('exit_time', '!=', '')->whereBetween('date', [$request->start_date, $request->end_date])->orderBy('date', 'asc')->get();
+      $employee_ids = Employee::pluck('id');
+
+      $reports = $this->generate_attendance_report_by_emp_ids_and_dates($employee_ids, $start_date, $end_date);
+
+      // echo '<pre>';
+      // print_r($reports);
+      // return;
+      return view('admin.pages.reports.index', compact('reports'));
     }
     // if only position selected
     if ($request->position != '' && $request->employee == '') {
-      $position_ids = EmployeeDetail::where('job_title', $request->position)->pluck('employee_id');
+      $employee_ids = EmployeeDetail::where('job_title', $request->position)->pluck('employee_id');
 
-      $attendances = EmployeeAttendance::whereIn('employee_id', $position_ids)->where('entry_time', '!=', '')->where('exit_time', '!=', '')->whereBetween('date', [$request->start_date, $request->end_date])->orderBy('date', 'asc')->get();
-    }
-    // if only employee selected
-    if ($request->position == '' && $request->employee != '') {
-      $attendances = EmployeeAttendance::where('employee_id', $request->employee)->where('entry_time', '!=', '')->where('exit_time', '!=', '')->whereBetween('date', [$request->start_date, $request->end_date])->orderBy('date', 'asc')->get();
+      $reports = $this->generate_attendance_report_by_emp_ids_and_dates($employee_ids, $start_date, $end_date);
+
+      return view('admin.pages.reports.index', compact('reports'));
     }
   }
 
@@ -59,7 +84,17 @@ class ReportController extends Controller
   {
     $attendances = EmployeeAttendance::where('employee_id', Auth::user()->id)->where('entry_time', '!=', '')->where('exit_time', '!=', '')->whereBetween('date', [$request->start_date, $request->end_date])->orderBy('date', 'asc')->get();
 
+    $data = $this->generate_single_data($attendances);
+
+    return view('pages.reports.index', compact('data', 'attendances'));
+  }
+
+  // method for generate single employee attendance data
+  public function generate_single_data($attendances)
+  {
     $data = array();
+
+    if (count($attendances) == 0) return $data;
 
     $in_time = '09:00:59';
     $late = 0;
@@ -85,6 +120,40 @@ class ReportController extends Controller
     $data['Average Office Time'] = $avg_time;
     $data['Day Attends'] = count($attendances) . ' Days';
 
-    return view('pages.reports.index', compact('data', 'attendances'));
+    return $data;
+  }
+
+  // generate report by employee ids
+  public function generate_attendance_report_by_emp_ids_and_dates($employee_ids, $start_date, $end_date)
+  {
+    $report = array();
+    foreach ($employee_ids as $id) {
+      $employee = Employee::findOrFail($id);
+      $attendances = EmployeeAttendance::where('employee_id', $id)->where('entry_time', '!=', '')->where('exit_time', '!=', '')->whereBetween('date', [$start_date, $end_date])->orderBy('date', 'asc')->get();
+
+      $report[$id] = [
+        'id' => $id,
+        'name' => $employee->name,
+        'email' => $employee->email,
+        'job_title' => $employee->detail->job_title ?? 'N/A',
+      ];
+      if (count($attendances) == 0) {
+        $report[$id]['data'] = [
+          'day_attends' => 'No Data Available',
+          'total_late' => 'No Data Available',
+          'avg_office_time' => 'No Data Available',
+        ];
+      } else {
+        $data = $this->generate_single_data($attendances);
+
+        $report[$id]['data'] = [
+          'day_attends' => $data["Day Attends"],
+          'total_late' => $data["Total Late"],
+          'avg_office_time' => $data["Average Office Time"],
+        ];
+      }
+    }
+    $report = json_decode(json_encode($report), FALSE);
+    return $report;
   }
 }

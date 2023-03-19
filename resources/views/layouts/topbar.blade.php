@@ -25,7 +25,7 @@
       <li class="nav-item d-none d-sm-inline-block">
         <form action="{{ route('end-attendance') }}" method="post">
           @csrf
-          <button class="btn btn-outline-success ml-2">
+          <button class="btn btn-outline-success">
             End Attendance
           </button>
         </form>

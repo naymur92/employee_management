@@ -57,11 +57,6 @@
                             <option value="{{ $item }}">{{ $item }}</option>
                           @endforeach
                         </select>
-                        @if (auth()->user()->attendances->where('date', date('Y-m-d'))->where('entry_time', '')->first())
-                          okay
-                        @else
-                          false
-                        @endif
                       </div>
                     </div>
                     <div class="col-sm-12 col-md-3">

@@ -44,7 +44,7 @@
   </script>
 @endpush
 
-@section('title', 'Attendance List - ' . auth()->user()->name)
+@section('title', 'Attendance List - ' . $employee->name)
 
 @section('content')
   <div class="content-wrapper">
@@ -58,7 +58,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{ route('emp_reports.query') }}">Report</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('admin_reports.query') }}">Reports</a></li>
               <li class="breadcrumb-item active">Attendance List</li>
             </ol>
           </div>
@@ -73,7 +73,8 @@
           <div class="col-12">
             <div class="card mt-5">
               <div class="card-header">
-                <h3 class="card-title">Attendance Summary of {{ auth()->user()->name }}</h3>
+                <h3 class="card-title">Attendance Summary of <a
+                    href="{{ route('employees.show', $employee->id) }}">{{ $employee->name }}</a></h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body d-flex justify-content-center">
@@ -90,7 +91,8 @@
             </div>
             <div class="card mt-5">
               <div class="card-header">
-                <h3 class="card-title">Attendance Report of {{ auth()->user()->name }}</h3>
+                <h3 class="card-title">Attendance Report of <a
+                    href="{{ route('employees.show', $employee->id) }}">{{ $employee->name }}</a></h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
