@@ -57,8 +57,7 @@
                             <option value="{{ $item }}">{{ $item }}</option>
                           @endforeach
                         </select>
-                        @if (auth()->user()->attendances->last()->date == date('Y-m-d') &&
-                                auth()->user()->attendances->last()->exit_time == '')
+                        @if (auth()->user()->attendances->where('date', date('Y-m-d'))->where('entry_time', '')->first())
                           okay
                         @else
                           false

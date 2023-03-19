@@ -9,37 +9,28 @@
     </li>
 
     {{-- start attendance --}}
-    @isset(auth()->user()->attendances->last()->date)
-      @if (auth()->user()->attendances->last()->date != date('Y-m-d') &&
-              auth()->user()->attendances->last()->entry_time != '')
-        <li class="nav-item d-none d-sm-inline-block">
-          <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#staticBackdrop">
-            Start Attendance
-          </button>
-        </li>
-      @endif
-    @else
+
+    @if (
+        !isset(auth()->user()->attendances->last()->date) ||
+            auth()->user()->attendances->where('date', date('Y-m-d'))->where('entry_time', '')->first())
       <li class="nav-item d-none d-sm-inline-block">
         <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#staticBackdrop">
           Start Attendance
         </button>
       </li>
-    @endisset
+    @endif
 
     {{-- end attendance --}}
-    @isset(auth()->user()->attendances->last()->date)
-      @if (auth()->user()->attendances->last()->date == date('Y-m-d') &&
-              auth()->user()->attendances->last()->exit_time == '')
-        <li class="nav-item d-none d-sm-inline-block">
-          <form action="{{ route('end-attendance') }}" method="post">
-            @csrf
-            <button class="btn btn-outline-success ml-2">
-              End Attendance
-            </button>
-          </form>
-        </li>
-      @endif
-    @endisset
+    @if (auth()->user()->attendances->where('date', date('Y-m-d'))->where('exit_time', '')->first())
+      <li class="nav-item d-none d-sm-inline-block">
+        <form action="{{ route('end-attendance') }}" method="post">
+          @csrf
+          <button class="btn btn-outline-success ml-2">
+            End Attendance
+          </button>
+        </form>
+      </li>
+    @endif
 
   </ul>
 
