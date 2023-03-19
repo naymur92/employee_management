@@ -51,18 +51,15 @@ class ReportController extends Controller
       return view('admin.pages.reports.single', compact('attendances', 'employee', 'data'));
     }
 
-
     // if position and employee are not selected
     if ($request->position == '' && $request->employee == '') {
       $employee_ids = Employee::pluck('id');
 
       $reports = $this->generate_attendance_report_by_emp_ids_and_dates($employee_ids, $start_date, $end_date);
 
-      // echo '<pre>';
-      // print_r($reports);
-      // return;
       return view('admin.pages.reports.index', compact('reports'));
     }
+
     // if only position selected
     if ($request->position != '' && $request->employee == '') {
       $employee_ids = EmployeeDetail::where('job_title', $request->position)->pluck('employee_id');
