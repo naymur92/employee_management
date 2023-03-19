@@ -10,9 +10,13 @@
 
     {{-- start attendance --}}
 
-    @if (
-        !isset(auth()->user()->attendances->last()->date) ||
-            auth()->user()->attendances->where('date', date('Y-m-d'))->where('entry_time', '')->first())
+    @if (!isset(auth()->user()->attendances->last()->date))
+      <li class="nav-item d-none d-sm-inline-block">
+        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#staticBackdrop">
+          Start Attendance
+        </button>
+      </li>
+    @elseif (!auth()->user()->attendances->where('date', date('Y-m-d'))->where('entry_time', '!=', '')->first())
       <li class="nav-item d-none d-sm-inline-block">
         <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#staticBackdrop">
           Start Attendance
