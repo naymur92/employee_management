@@ -1,8 +1,8 @@
-## Employee Attendance Management
+# Employee Attendance Management
 
 This application is developed using laravel 8 / php 8.0 or + needed:
 
-# Commands to active application
+## Commands to active application
 
 -   composer install / composer update
 -   npm install
@@ -10,9 +10,9 @@ This application is developed using laravel 8 / php 8.0 or + needed:
 -   make env file and give command 'php artisan key:generate'
 -   setup db and give command 'php artisan migrate --seed' or import backup db file
 
-## Application Features
+# Application Features
 
-# From Admin Panel
+## From Admin Panel
 
 -   Create Employee
 -   Employee List
@@ -22,14 +22,14 @@ This application is developed using laravel 8 / php 8.0 or + needed:
 -   Employee Filter (Full Name, Contact Name, Status)
 -   Attendance Reports
 
-# From Employee Panel
+## From Employee Panel
 
 -   Add Attendance with Push Button (like bKash)
 -   Calculate In Time and Out Time
 -   Attendance List
 -   Reports
 
-## Login Details
+# Login Details
 
 -   admin: naymur@example.com
 -   employee: kamrul@example.com
