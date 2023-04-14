@@ -1,6 +1,6 @@
 # Employee Attendance Management
 
-This application is developed using laravel 8 / php 8.0 or + needed:
+This application is developed using laravel 8. php 8.0 or more needed
 
 ## Commands to active application
 
