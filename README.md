@@ -12,6 +12,12 @@ This application is developed using laravel 8. php 8.0 or more needed
 
 # Application Features
 
+-   Login with google
+-   Laravel UI for auth system
+-   Employee Middleware for multi role authentication
+-   Login from employees table (not users table)
+-   Admin Panel and Employee Panel
+
 ## From Admin Panel
 
 -   Create Employee
